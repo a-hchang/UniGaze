@@ -1,4 +1,4 @@
-# UniGaze: Towards Universal Gaze Estimation via Large-scale Pre-Training
+# [WACV 2026] UniGaze: Towards Universal Gaze Estimation via Large-scale Pre-Training 
 > [[arxiv]](https://arxiv.org/pdf/2502.02307), [[online demo]](https://huggingface.co/spaces/UniGaze/UniGaze)
 
 <a href="https://jqin-home.github.io/">Jiawei Qin</a><sup>1</sup>, 
