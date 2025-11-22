@@ -37,9 +37,9 @@ This repository contains the official PyTorch implementation of both **MAE pre-t
 
 ---
 
-## Easy use via Pip
+## Easy use UniGaze
 
-You can easily use UniGaze with the pip command: 
+You can use UniGaze with the pip command: 
 ```bash
 pip install unigaze
 ```
