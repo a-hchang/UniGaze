@@ -17,12 +17,12 @@ from tqdm import tqdm
 from util_func import rad_to_degree, draw_sns, grid_images, write_error, set_dummy_camera_model
 from landmarks_func import get_landmarks_from_image
 
-unigaze_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+unigaze_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'unigaze'))
 sys.path.insert(0, unigaze_root)
-from unigaze.gazelib.label_transform import lm68_to_50, get_eye_nose_landmarks 
-from unigaze.gazelib.gaze.normalize import normalize, estimateHeadPose
-from unigaze.gazelib.utils.h5_utils import add, to_h5
-from unigaze.gazelib.label_transform import get_eye_nose_landmarks, get_face_center_by_nose
+from gazelib.label_transform import lm68_to_50, get_eye_nose_landmarks 
+from gazelib.gaze.normalize import normalize, estimateHeadPose
+from gazelib.utils.h5_utils import add, to_h5
+from gazelib.label_transform import get_eye_nose_landmarks, get_face_center_by_nose
 sys.path.remove(unigaze_root)
 
 
@@ -42,7 +42,9 @@ def main():
 		temp_dir = osp.join(output_dir, 'temp'); os.makedirs(temp_dir, exist_ok=True)
 		sample_dir = osp.join(output_dir, 'samples'); os.makedirs(sample_dir, exist_ok=True)
 
-		save_path = osp.join(output_dir, f'part_{(int(tar_name[3:-4]) // 10 + 1)}.h5')
+		# Extract the first number from tar filename (e.g., sp_0000-057.tar -> 0000)
+		tar_number = int(tar_name.split('_')[1].split('-')[0])
+		save_path = osp.join(output_dir, f'part_{(tar_number // 10 + 1)}.h5')
 		
 		tar_path = os.path.join(input_dir, tar_name)
 		with tarfile.open(tar_path, 'r') as tar:
@@ -88,7 +90,8 @@ def main():
 						camera_matrix, camera_distortion = set_dummy_camera_model( image = image)
 						##  Data Normalization
 						## --------------------------------------------  estimate head pose --------------------------------------------
-						face_model_load = np.loadtxt(osp.join(osp.dirname(osp.abspath(__file__)), 'face_model.txt') )
+						face_model_path = osp.join(osp.dirname(osp.abspath(__file__)), '..', 'unigaze', 'data', 'face_model.txt')
+						face_model_load = np.loadtxt(face_model_path)
 						''' Use 50 landmarks to estimate head pose, or only use 6 landmarks '''
 						if use_50:
 							hr, ht = estimateHeadPose(lm68_to_50(lm_gt).astype(float).reshape(50, 1, 2) , face_model_load.reshape(50, 1, 3), camera_matrix, camera_distortion, iterate=True)
